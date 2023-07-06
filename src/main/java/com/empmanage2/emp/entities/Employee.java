@@ -34,13 +34,16 @@ public class Employee {
 	private String state;
 	
 	private String district;
+	
+	private String imageUrl;
 
 	public Employee() {
 		super();
 	}
 
 	public Employee(int empid, String emailid, String firstName, String midName, String lastName, String dob,
-			String gender, String doj, String retireDate, String bloodgroup, String state, String district) {
+			String gender, String doj, String retireDate, String bloodgroup, String state, String district,
+			String imageUrl) {
 		super();
 		this.empid = empid;
 		this.emailid = emailid;
@@ -54,7 +57,10 @@ public class Employee {
 		this.bloodgroup = bloodgroup;
 		this.state = state;
 		this.district = district;
+		this.imageUrl = imageUrl;
 	}
+
+
 
 	public int getEmpid() {
 		return empid;
@@ -161,7 +167,16 @@ public class Employee {
 	}
 	
 	
-	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 	
 	
 

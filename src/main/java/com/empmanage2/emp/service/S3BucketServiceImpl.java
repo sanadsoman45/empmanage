@@ -1,17 +1,22 @@
 package com.empmanage2.emp.service;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.CreateBucketConfiguration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketResponse;
 import software.amazon.awssdk.services.s3.model.PublicAccessBlockConfiguration;
@@ -39,10 +44,8 @@ public class S3BucketServiceImpl implements S3BucketService {
 	public String createBucketPolicy() {
 		String policy = null;
 		try {
-			String bucketArn = "arn:aws:s3:::" + bucketName;
-
-			// Define the bucket policy
-			policy = "{\n" + "  \"Version\":\"2012-10-17\",\n" + "  \"Statement\":[\n" + "    {\n"
+			String bucketArn = "arn:aws:s3:::"+bucketName;
+			policy =  "{\n" + "  \"Version\":\"2012-10-17\",\n" + "  \"Statement\":[\n" + "    {\n"
 					+ "      \"Sid\":\"AllowPictureUploads\",\n" + "      \"Effect\":\"Allow\",\n"
 					+ "      \"Principal\": \"*\",\n" + "      \"Action\":[\"s3:PutObject\"],\n"
 					+ "      \"Resource\":[\"" + bucketArn + "/*\"],\n" + "      \"Condition\": {\n"
@@ -54,6 +57,7 @@ public class S3BucketServiceImpl implements S3BucketService {
 					+ "      \"Effect\":\"Allow\",\n" + "      \"Principal\": \"*\",\n"
 					+ "      \"Action\":[\"s3:DeleteObject\"],\n" + "      \"Resource\":[\"" + bucketArn + "/*\"]\n"
 					+ "    }\n" + "  ]\n" + "}";
+
 
 		} catch (AwsServiceException e) {
 			e.printStackTrace();
@@ -88,8 +92,6 @@ public class S3BucketServiceImpl implements S3BucketService {
 			}
 		} catch (S3Exception e) {
 			if (e.statusCode() != 404) {
-				// If the exception is not due to the bucket not found (404),
-				// rethrow the exception or handle it accordingly
 				throw e;
 			}
 		}
@@ -125,23 +127,27 @@ public class S3BucketServiceImpl implements S3BucketService {
 	}
 
 	@Override
-	public String putObject(String emailId, String filePath) {
+	public String putObject(MultipartFile file) {
 		String keyName = null;
 
 		try {
+			System.out.println(file==null);
 
-			createBucket();
-
-			keyName = "document/" + emailId + "_" + UUID.randomUUID().toString() + ".jpg";
+			keyName = UUID.randomUUID().toString() + ".jpg";
 			PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName).key(keyName).build();
+	
+			RequestBody requestBody = RequestBody.fromBytes(file.getBytes());
+			s3client.putObject(putObjectRequest,requestBody);
+		
+			return s3client.utilities().getUrl(GetUrlRequest.builder().bucket(bucketName).key(keyName).build()).toExternalForm();
+			
+			
 
-			s3client.putObject(putObjectRequest, Paths.get(filePath));
-
-		} catch (AwsServiceException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return keyName;
+		return null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.empmanage2.emp.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import software.amazon.awssdk.services.s3.model.Bucket;
 
 public interface S3BucketService {
@@ -13,7 +15,7 @@ public interface S3BucketService {
 	//Set the policies created to the bucket
 	public void setBucketPolicy();
 	
-	public String putObject(String emailid, String filePath);
+	public String putObject(MultipartFile file);
 	
 	public void configurePublicAccess();
 

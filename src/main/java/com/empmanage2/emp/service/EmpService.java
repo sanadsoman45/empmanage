@@ -17,5 +17,7 @@ public interface EmpService {
 
 	public void deleteAll();
 	
+	public void updateUser(Employee emp);
+	
 //	public void putObject(String bucketName);s
 }

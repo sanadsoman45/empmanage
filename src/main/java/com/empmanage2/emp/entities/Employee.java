@@ -31,10 +31,6 @@ public class Employee {
 	
 	private String bloodgroup;
 	
-	private String state;
-	
-	private String district;
-	
 	private String imageUrl;
 
 	public Employee() {
@@ -42,7 +38,7 @@ public class Employee {
 	}
 
 	public Employee(int empid, String emailid, String firstName, String midName, String lastName, String dob,
-			String gender, String doj, String retireDate, String bloodgroup, String state, String district,
+			String gender, String doj, String retireDate, String bloodgroup, 
 			String imageUrl) {
 		super();
 		this.empid = empid;
@@ -55,8 +51,7 @@ public class Employee {
 		this.doj = doj;
 		this.retireDate = retireDate;
 		this.bloodgroup = bloodgroup;
-		this.state = state;
-		this.district = district;
+	
 		this.imageUrl = imageUrl;
 	}
 
@@ -142,30 +137,6 @@ public class Employee {
 		this.bloodgroup = bloodgroup;
 	}
 
-
-
-	public String getState() {
-		return state;
-	}
-
-
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-
-
-	public String getDistrict() {
-		return district;
-	}
-
-
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-	
 	
 	public String getImageUrl() {
 		return imageUrl;

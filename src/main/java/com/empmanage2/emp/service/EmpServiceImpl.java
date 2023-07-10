@@ -11,8 +11,6 @@ import com.empmanage2.emp.dao.EmployeeDao;
 import com.empmanage2.emp.entities.Employee;
 
 
-
-
 @Service
 public class EmpServiceImpl implements EmpService {
 
@@ -34,13 +32,7 @@ public class EmpServiceImpl implements EmpService {
 		if (result != null) {
 			throw new RuntimeException("Employee Already Exists");
 		}
-//		String keyName = s3Service.putObject(emp.getEmailid(), filePath);
-//		
-//		if(keyName != "") {
-//			emp.setImageUrl(keyName);
-//			emp = empDao.save(emp);
-//		}
-		s3Service.createBucket();
+		emp = empDao.save(emp);
 		return emp;
 	}
 
@@ -85,6 +77,17 @@ public class EmpServiceImpl implements EmpService {
 	public void deleteAll() {
 		empDao.deleteAll();
 
+	}
+
+	@Override
+	public void updateUser(Employee emp) {
+		
+		if(empDao.findByemailid(emp.getEmailid()) == null) {
+			throw new RuntimeException("Employee not Found");
+		}
+		empDao.save(emp);
+		
+		
 	}
 
 	

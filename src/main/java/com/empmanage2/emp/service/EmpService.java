@@ -7,7 +7,7 @@ import com.empmanage2.emp.entities.Employee;
 import com.empmanage2.emp.entities.Employee;
 
 public interface EmpService {
-	public Employee addEmp(Employee emp);
+	public Employee addEmp(Employee emp) ;
 
 	public List<Employee> getAllEmployee();
 
@@ -16,4 +16,8 @@ public interface EmpService {
 	public String deleteEmp(String emailid);
 
 	public void deleteAll();
+	
+	public void updateUser(Employee emp);
+	
+//	public void putObject(String bucketName);s
 }
